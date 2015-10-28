@@ -48,8 +48,9 @@ class QunarSpider(scrapy.Spider):
         #景区介绍
         introducep = response.xpath('//div[@class="e_db_content_box"]').extract()
         item['introduce'] = '<br>'.join(introducep).encode('utf-8')
-        # >>> response.xpath('//div[@class="e_summary_list_box m_summary_two_col"]/div/table/tbody/tr/td[@class="td_l"]/dl/dd/span/text()').extract()
-        td_l = response.xpath('//div[@class="e_summary_list clrfix"]/table/tbody/tr/td[@class="td_l"]/dl/dd/span/text()').extract()        
+        #td_l = response.xpath('//div[@class="e_summary_list clrfix"]/table/tbody/tr/td[@class="td_l"]/dl/dd/span/text()').extract()   
+        # scrapy 不认识 tbody标签^_^!
+        td_l = response.xpath('//td[@class="td_l"]/dl/dd/span/text()').extract()     
         #景区地址
         if td_l:
             
