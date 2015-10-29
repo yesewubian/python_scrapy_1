@@ -50,7 +50,7 @@ class QunarSpider(scrapy.Spider):
         item['introduce'] = '<br>'.join(introducep).encode('utf-8')
         #td_l = response.xpath('//div[@class="e_summary_list clrfix"]/table/tbody/tr/td[@class="td_l"]/dl/dd/span/text()').extract()   
         # scrapy 不认识 tbody标签^_^!
-        td_l = response.xpath('//td[@class="td_l"]/dl/dd/span/text()').extract()     
+        td_l = response.xpath('//td[@class="td_l"]/dl/dd/span/text()').extract()    
         #景区地址
         if td_l:
             
