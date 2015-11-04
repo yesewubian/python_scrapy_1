@@ -12,6 +12,7 @@ class QunarSpider(scrapy.Spider):
         #"http://localhost/qunar_xiamen.htm",
         #"http://localhost/qunar_gugong.htm",
         #"http://localhost/qunar_tiananmen.htm",
+        #"http://travel.qunar.com/p-oi701743-huaboyuan",
     )
 
     def parse(self, response):
@@ -19,9 +20,10 @@ class QunarSpider(scrapy.Spider):
         for node in nodes:
              city = node.xpath('text()').extract()[0]
              url  = node.xpath('@href').extract()[0]+'-jingdian'
-             yield scrapy.Request(url, callback=self.parse_page, meta={'city': city})
+             yield scrapy.Request(url, callback=self.parse_item, meta={'city': city})
 
     def parse_page(self, response):
+        #由于scrapy的防重复机制，这样做会丢失对各分类下的第一页的抓取,可将parse中的回调函数名改为parse_item,跳过本函数来抓取各分类第一页的内容
         last_page = response.xpath('//div[@class="b_paging"]/a')
         if last_page:
             if last_page[-1].xpath('text()').extract()[0].encode('utf-8') == '下一页':
@@ -50,7 +52,7 @@ class QunarSpider(scrapy.Spider):
         item['introduce'] = '<br>'.join(introducep).encode('utf-8')
         #td_l = response.xpath('//div[@class="e_summary_list clrfix"]/table/tbody/tr/td[@class="td_l"]/dl/dd/span/text()').extract()   
         # scrapy 不认识 tbody标签^_^!
-        td_l = response.xpath('//td[@class="td_l"]/dl/dd/span/text()').extract()    
+        td_l = response.xpath('//td[@class="td_l"]/dl/dd/span/text()').extract()
         #景区地址
         if td_l:
             
@@ -94,4 +96,5 @@ class QunarSpider(scrapy.Spider):
         #response.meta['city'] = '北京'
         item['city'] = response.meta['city']
 
+        #print item
         return item

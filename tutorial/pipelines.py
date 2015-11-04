@@ -11,6 +11,9 @@ class QunarPipeline(object):
         self.conn = MySQLdb.connect(user='root', passwd='', db='spider', host='localhost', charset="utf8", use_unicode=True)
         self.cursor = self.conn.cursor()
 
+    def process_item_bak(self, item, spider):
+        pass
+    
     def process_item(self, item, spider):
         try:
             self.cursor.execute("""SELECT * FROM qn_region WHERE name = %s""",(item['city']))
